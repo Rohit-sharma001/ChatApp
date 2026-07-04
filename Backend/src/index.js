@@ -1,7 +1,20 @@
 import express from "express";
-import "dotenv/config"
+import "dotenv/config";
+import cors from "cors";
+import { clerkMiddleware } from '@clerk/express'
+
+import User from "./models/user.model.js";
+import {connectDB} from "./lib/db.js";
 
 const app = express();
-const PORT=process.env.PORT
+const PORT=process.env.PORT;
+const FRONTEND_URL=process.env.FRONTEND_URL;
 
-app.listen(PORT, ()=> console.log("server is running on the PORT:",PORT));
+app.use(express.json());
+app.use(cors({origin: FRONTEND_URL, credentials: true}));
+app.use(clerkMiddleware());
+
+app.listen(PORT, ()=> {
+    connectDB();
+    console.log("server is running on the PORT:",PORT);
+});

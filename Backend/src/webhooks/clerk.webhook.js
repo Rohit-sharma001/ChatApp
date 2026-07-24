@@ -41,22 +41,8 @@ router.post("/", async (req, res) => {
     }
 
     if (evt.type === "user.deleted") {
-  console.log("Delete Event");
-
-  console.log("ID from Clerk:", evt.data.id);
-
-  const existing = await User.findOne({
-    clerkId: evt.data.id,
-  });
-
-  console.log("Existing:", existing);
-
-  const deleted = await User.findOneAndDelete({
-    clerkId: evt.data.id,
-  });
-
-  console.log("Deleted:", deleted);
-}
+      if (evt.data.id) await User.findOneAndDelete({ clerkId: evt.data.id });
+    }
 
     res.status(200).json({ received: true });
   } catch (error) {
